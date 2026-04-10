@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title><%= pageTitle %></title>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="/css/style.css" />
+	<script src="/js/main.js" defer></script>
+</head>
+<body data-view="movers">
+	<div class="bg-orb orb-one"></div>
+	<div class="bg-orb orb-two"></div>
+
+	<main class="container">
+		<%- include('layout', { currentPath }) %>
+
+		<section class="hero">
+			<div>
+				<p class="eyebrow">Momentum Scanner</p>
+				<h1>Today’s top movers in one clean signal board.</h1>
+				<p class="lead">Auto-updated list ranked by strongest percentage movement.</p>
+			</div>
+			<div class="hero-actions">
+				<a class="btn-primary" href="/">Back to Dashboard</a>
+			</div>
+		</section>
+
+		<section id="moversGrid" class="movers-grid">
+			<% topMovers.forEach((stock) => { %>
+				<article class="glass-card mover-card <%= stock.change >= 0 ? 'is-up' : 'is-down' %>">
+					<header>
+						<h3><%= stock.symbol %></h3>
+						<span><%= stock.sector %></span>
+					</header>
+					<p class="mover-name"><%= stock.name %></p>
+					<div class="mover-main">
+						<strong><%= stock.price %></strong>
+						<p class="<%= stock.change >= 0 ? 'up' : 'down' %>">
+							<%= stock.change >= 0 ? '+' : '' %><%= stock.changePercent %>%
+						</p>
+					</div>
+					<footer>
+						<small>Vol: <%= stock.volume.toLocaleString('en-IN') %></small>
+					</footer>
+				</article>
+			<% }) %>
+		</section>
+	</main>
+</body>
+</html>

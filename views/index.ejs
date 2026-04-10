@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title><%= pageTitle %></title>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="/css/style.css" />
+	<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js" defer></script>
+	<script src="/js/main.js" defer></script>
+</head>
+<body data-view="dashboard">
+	<div class="bg-orb orb-one"></div>
+	<div class="bg-orb orb-two"></div>
+
+	<main class="container">
+		<%- include('layout', { currentPath }) %>
+
+		<section class="hero">
+			<div>
+				<p class="eyebrow">Market Intelligence</p>
+				<h1>Track live stock motion with a fast, modern dashboard.</h1>
+				<p class="lead">
+					The data feed currently uses a simulation engine so your platform stays functional.
+					Swap in your own acquisition mechanism anytime via service methods.
+				</p>
+			</div>
+			<div class="hero-actions">
+				<a class="btn-primary" href="/top-movers">View Top Movers</a>
+				<button id="refreshNow" class="btn-outline" type="button">Refresh Now</button>
+			</div>
+		</section>
+
+		<section class="kpi-grid" id="kpiGrid">
+			<article class="glass-card kpi">
+				<span>Advancers</span>
+				<h3 id="advancersCount"><%= market.advancers %></h3>
+			</article>
+			<article class="glass-card kpi">
+				<span>Decliners</span>
+				<h3 id="declinersCount"><%= market.decliners %></h3>
+			</article>
+			<article class="glass-card kpi">
+				<span>Average Move</span>
+				<h3 id="avgMove"><%= market.avgMove %>%</h3>
+			</article>
+			<article class="glass-card kpi">
+				<span>Total Volume</span>
+				<h3 id="totalVolume"><%= market.totalVolume.toLocaleString('en-IN') %></h3>
+			</article>
+		</section>
+
+		<section class="panel-grid">
+			<article class="glass-card panel">
+				<div class="panel-head">
+					<h2>Market Breadth</h2>
+					<p>Composite movement from the current feed.</p>
+				</div>
+				<canvas id="marketChart" height="120"></canvas>
+			</article>
+
+			<article class="glass-card panel">
+				<div class="panel-head">
+					<h2>Watchlist</h2>
+					<input id="searchInput" class="search" type="search" placeholder="Search symbol or company" />
+				</div>
+				<div class="table-wrap">
+					<table>
+						<thead>
+							<tr>
+								<th>Symbol</th>
+								<th>Price</th>
+								<th>Change</th>
+								<th>Volume</th>
+							</tr>
+						</thead>
+						<tbody id="stocksTableBody">
+							<% stocks.forEach((stock) => { %>
+								<tr data-symbol="<%= stock.symbol %>">
+									<td>
+										<strong><%= stock.symbol %></strong>
+										<small><%= stock.name %></small>
+									</td>
+									<td><%= stock.price %></td>
+									<td class="<%= stock.change >= 0 ? 'up' : 'down' %>">
+										<%= stock.change >= 0 ? '+' : '' %><%= stock.change %> (<%= stock.changePercent %>%)
+									</td>
+									<td><%= stock.volume.toLocaleString('en-IN') %></td>
+								</tr>
+							<% }) %>
+						</tbody>
+					</table>
+				</div>
+			</article>
+		</section>
+	</main>
+</body>
+</html>
